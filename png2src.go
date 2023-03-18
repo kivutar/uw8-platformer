@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"image/png"
 	"os"
+	"path/filepath"
 )
 
 func indexOf(c color.Color, pal []color.Color) int {
@@ -14,6 +15,10 @@ func indexOf(c color.Color, pal []color.Color) int {
 		}
 	}
 	return -1
+}
+
+func noExt(fileName string) string {
+	return fileName[:len(fileName)-len(filepath.Ext(fileName))]
 }
 
 func main() {
@@ -34,7 +39,7 @@ func main() {
 		panic("no palette")
 	}
 
-	fmt.Print("{")
+	fmt.Printf("pub const %s = [256]u8{", noExt(infile.Name()))
 
 	bounds := src.Bounds()
 	w, h := bounds.Max.X, bounds.Max.Y
