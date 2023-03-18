@@ -75,7 +75,7 @@ pub const Turnip = struct {
             self.yspeed = 0;
             self.yaccel = 0;
             if (isButtonPressed(4) != 0) {
-                //playNote(300, 0);
+                playNote(300, 0);
                 self.yspeed = -4;
             }
         } else {
@@ -84,8 +84,8 @@ pub const Turnip = struct {
 
         self.xspeed = utils.clamp(self.xspeed, -2, 2);
         self.yspeed = utils.clamp(self.yspeed, -4, 4);
-        self.x += self.xspeed / 20;
-        self.y += self.yspeed / 20;
+        self.x += self.xspeed;
+        self.y += self.yspeed;
         self.xspeed = utils.xfriction(self.xspeed);
 
         if (lvl_at((self.x+self.width)/16, self.y/16) == 1 and self.xspeed > 0) {
@@ -118,6 +118,6 @@ pub const Turnip = struct {
     }
 
     pub fn draw(self: *Self) void {
-        gfx.blit(&self.anim.frames[(self.anim.counter/120)%4][0], @floatToInt(i32, self.x)-2, @floatToInt(i32, self.y), 0xe8, self.flip);
+        gfx.blit(&self.anim.frames[(self.anim.counter/8)%4][0], @floatToInt(i32, self.x)-2, @floatToInt(i32, self.y), 0xe8, self.flip);
     }
 };
