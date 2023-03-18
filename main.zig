@@ -22,7 +22,7 @@ const lvl = [15][20]u8{
 };
 
 export fn upd() void {
-	cls(0x0d);
+	cls(0xe8);
 
 	var row_i: usize = 0;
     for (lvl) |row| {
@@ -36,5 +36,5 @@ export fn upd() void {
 		row_i += 1;
     }
 
-	gfx.blit(&sprites.turnip_spr1, 140, 140, 0x0d, true);
+	gfx.blit(&sprites.turnip_spr1, 140, 140, 0xe8, true);
 }
