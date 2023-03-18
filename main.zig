@@ -1,5 +1,6 @@
 const sprites = @import("sprites.zig");
 const gfx = @import("gfx.zig");
+const turnip = @import("turnip.zig");
 
 extern fn cls(color: i32) void;
 
@@ -21,6 +22,26 @@ const lvl = [15][20]u8{
 	[_]u8{1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 };
 
+const Rigid = struct {
+	x:      f32,
+	y:      f32,
+	width:  f32,
+	height: f32,
+	speed:  f32,
+	angle:  f32,
+	xspeed: f32,
+	yspeed: f32,
+	xaccel: f32,
+	yaccel: f32,
+};
+
+var tur1  = turnip.Turnip{
+	.x = 32,
+	.y = 32,
+	.width = 12,
+	.height = 16,
+};
+
 export fn upd() void {
 	cls(0xe8);
 
@@ -36,5 +57,6 @@ export fn upd() void {
 		row_i += 1;
     }
 
-	gfx.blit(&sprites.turnip_spr0, 140, 140, 0xe8, true);
+	tur1.update();
+	tur1.draw();
 }
