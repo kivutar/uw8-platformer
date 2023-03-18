@@ -1,10 +1,9 @@
 const sprites = @import("sprites.zig");
 const map = @import("map.zig");
 const gfx = @import("gfx.zig");
-const anim = @import("anim.zig");
 const utils = @import("utils.zig");
 
-var turnip_run_anim = Anim {
+var turnip_run_anim = gfx.Anim {
 	.frames = &[_][256]u8{
 		sprites.turnip_spr0,
 		sprites.turnip_spr1,
@@ -13,13 +12,13 @@ var turnip_run_anim = Anim {
 	},
 };
 
-var turnip_stand_anim = Anim {
+var turnip_stand_anim = gfx.Anim {
 	.frames = &[_][256]u8{
 		sprites.turnip_spr3,
 	},
 };
 
-var turnip_jump_anim = Anim {
+var turnip_jump_anim = gfx.Anim {
 	.frames = &[_][256]u8{
 		sprites.turnip_spr0,
 	},
@@ -40,7 +39,7 @@ pub const Turnip = struct {
 	y:      f32,
 	width:  f32,
 	height: f32,
-    anim:   *Anim = undefined,
+    anim:   *gfx.Anim = undefined,
     flip:   bool = false,
 	xspeed: f32 = 0,
 	yspeed: f32 = 0,

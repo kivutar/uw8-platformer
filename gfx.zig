@@ -1,5 +1,10 @@
 pub const FRAMEBUFFER: *[320*240]u8 = @intToPtr(*[320*240]u8, 120);
 
+pub const Anim = struct {
+	frames:  []const [256]u8,
+	counter: u8 = 0,
+};
+
 pub fn blit(spr: *const [256]u8, dx: i32, dy: i32, trans: u8, flip: bool) void {
 	var x: u32 = 0;
 	var y: u32 = 0;
