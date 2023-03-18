@@ -16,21 +16,6 @@ pub fn xfriction(v: f32) f32 {
 	return v2;
 }
 
-// pub fn yfriction(v float64, pad uint8) float64 {
-// 	if v < 0 && (pad&w4.BUTTON_UP == 0) {
-// 		v += 0.1
-// 		if v > 0 {
-// 			v = 0
-// 		}
-// 	} else if v > 0 && (pad&w4.BUTTON_DOWN == 0) {
-// 		v -= 0.1
-// 		if v < 0 {
-// 			v = 0
-// 		}
-// 	}
-// 	return v
-// }
-
 pub fn clamp(v: f32, min: f32, max: f32) f32 {
 	if (v < min) {
 		return min;

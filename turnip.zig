@@ -32,6 +32,7 @@ var turnip_jump_anim = anim.Anim {
 };
 
 extern fn isButtonPressed(btn: i32) i32;
+extern fn playNote(channel: i32, note: i32) void;
 
 fn lvl_at(x: f32, y: f32) i32 {
     return map.lvl[@floatToInt(usize, y)][@floatToInt(usize, x)];
@@ -73,10 +74,10 @@ pub const Turnip = struct {
             self.y = @intToFloat(f32, (@floatToInt(i32, self.y/16)) * 16);
             self.yspeed = 0;
             self.yaccel = 0;
-            // if pad&w4.BUTTON_1 != 0 {
-            //     w4.Tone(300, 1, 100, w4.TONE_TRIANGLE)
-            //     self.yspeed = -4
-            // }
+            if (isButtonPressed(4) != 0) {
+                //playNote(300, 0);
+                self.yspeed = -4;
+            }
         } else {
             self.yaccel = 0.2;
         }
@@ -88,13 +89,13 @@ pub const Turnip = struct {
         self.xspeed = utils.xfriction(self.xspeed);
 
         if (lvl_at((self.x+self.width)/16, self.y/16) == 1 and self.xspeed > 0) {
-            self.x = @intToFloat(f32, (@floatToInt(i32, (self.x/16))*16 + 16 - @floatToInt(i32,self.width)));
+            self.x = @floor(self.x/16)*16 + 16 - self.width;
             self.xspeed = 0;
             self.xaccel = 0;
         }
 
         if (lvl_at((self.x)/16, self.y/16) == 1 and self.xspeed < 0) {
-            self.x = @intToFloat(f32, (@floatToInt(i32, (self.x/16))*16 + 16));
+            self.x = @floor(self.x/16)*16 + 16;
             self.xspeed = 0;
             self.xaccel = 0;
         }
@@ -114,13 +115,9 @@ pub const Turnip = struct {
         }
 
         self.anim.counter += 1;
-
-        if (self.y > 240) {
-            self.y = 0;
-        }
     }
 
     pub fn draw(self: *Self) void {
-        gfx.blit(&self.anim.frames[(self.anim.counter/8)%(self.anim.frames.len)][0], @floatToInt(i32, self.x), @floatToInt(i32, self.y), 0xe8, self.flip);
+        gfx.blit(&self.anim.frames[(self.anim.counter/120)%4][0], @floatToInt(i32, self.x)-2, @floatToInt(i32, self.y), 0xe8, self.flip);
     }
 };
