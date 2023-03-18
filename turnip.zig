@@ -32,6 +32,7 @@ var turnip_jump_anim = anim.Anim {
 };
 
 extern fn isButtonPressed(btn: i32) i32;
+extern fn isButtonTriggered(btn: i32) i32;
 extern fn playNote(channel: i32, note: i32) void;
 
 fn lvl_at(x: f32, y: f32) i32 {
@@ -74,7 +75,7 @@ pub const Turnip = struct {
             self.y = @intToFloat(f32, (@floatToInt(i32, self.y/16)) * 16);
             self.yspeed = 0;
             self.yaccel = 0;
-            if (isButtonPressed(4) != 0) {
+            if (isButtonTriggered(4) != 0) {
                 playNote(300, 0);
                 self.yspeed = -4;
             }
