@@ -4,8 +4,8 @@ const gfx = @import("gfx.zig");
 const anim = @import("anim.zig");
 const utils = @import("utils.zig");
 
-var turnip_run_anim = anim.Anim {
-	.frames = [4][256]u8{
+var turnip_run_anim = Anim {
+	.frames = &[_][256]u8{
 		sprites.turnip_spr0,
 		sprites.turnip_spr1,
 		sprites.turnip_spr2,
@@ -13,21 +13,15 @@ var turnip_run_anim = anim.Anim {
 	},
 };
 
-var turnip_stand_anim = anim.Anim {
-	.frames = [4][256]u8{
+var turnip_stand_anim = Anim {
+	.frames = &[_][256]u8{
 		sprites.turnip_spr3,
-        sprites.turnip_spr3,
-        sprites.turnip_spr3,
-        sprites.turnip_spr3,
 	},
 };
 
-var turnip_jump_anim = anim.Anim {
-	.frames = [4][256]u8{
+var turnip_jump_anim = Anim {
+	.frames = &[_][256]u8{
 		sprites.turnip_spr0,
-        sprites.turnip_spr0,
-        sprites.turnip_spr0,
-        sprites.turnip_spr0,
 	},
 };
 
@@ -46,7 +40,7 @@ pub const Turnip = struct {
 	y:      f32,
 	width:  f32,
 	height: f32,
-    anim:   *anim.Anim = undefined,
+    anim:   *Anim = undefined,
     flip:   bool = false,
 	xspeed: f32 = 0,
 	yspeed: f32 = 0,
@@ -119,6 +113,6 @@ pub const Turnip = struct {
     }
 
     pub fn draw(self: *Self) void {
-        gfx.blit(&self.anim.frames[(self.anim.counter/8)%4][0], @floatToInt(i32, self.x)-2, @floatToInt(i32, self.y), 0xe8, self.flip);
+        gfx.blit(&self.anim.frames[(self.anim.counter/8)%self.anim.frames.len][0], @floatToInt(i32, self.x)-2, @floatToInt(i32, self.y), 0xe8, self.flip);
     }
 };
