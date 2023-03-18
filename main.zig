@@ -36,5 +36,5 @@ export fn upd() void {
 		row_i += 1;
     }
 
-	gfx.blit(&sprites.turnip_spr1, 140, 140, 0x0d, false);
+	gfx.blit(&sprites.turnip_spr1, 140, 140, 0x0d, true);
 }
