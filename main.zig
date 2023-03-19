@@ -20,7 +20,7 @@ const Rigid = struct {
 };
 
 export fn upd() void {
-	cls(0xe8);
+	cls(44);
 
 	turnip.tur1.update();
 	camera.update();
@@ -36,6 +36,10 @@ fn draw() void {
 			} else if (map.lvl[y][x] == 1) {
 				gfx.blit(&sprites.block_spr, @intCast(i32, x)*16, @intCast(i32, y)*16, 0x00, false);
 			}
+			if (map.lvl[y][x] == 1 and map.lvl[y-1][x] != 1) gfx.rect(@intCast(i32, x)*16, @intCast(i32, y)*16, 16, 1, 176);
+			if (map.lvl[y][x] == 1 and map.lvl[y+1][x] != 1) gfx.rect(@intCast(i32, x)*16, @intCast(i32, y+1)*16, 16, 1, 176);
+			if (map.lvl[y][x] == 1 and map.lvl[y][x-1] != 1) gfx.rect(@intCast(i32, x)*16, @intCast(i32, y)*16, 1, 16, 176);
+			if (map.lvl[y][x] == 1 and map.lvl[y][x+1] != 1) gfx.rect(@intCast(i32, x+1)*16, @intCast(i32, y)*16, 1, 16, 176);
 		}
 	}
 
