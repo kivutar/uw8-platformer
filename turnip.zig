@@ -3,6 +3,8 @@ const map = @import("map.zig");
 const gfx = @import("gfx.zig");
 const utils = @import("utils.zig");
 
+const JUMP_FORGIVENESS = 4;
+
 var turnip_run_anim = gfx.Anim {
 	.frames = &[_][256]u8{
 		sprites.turnip_spr0,
@@ -45,6 +47,7 @@ pub const Turnip = struct {
 	yspeed: f32 = 0,
 	xaccel: f32 = 0,
 	yaccel: f32 = 0,
+    ungrounded_frames: u8 = 0,
 
     fn ontheground(self: *Self) bool {
         return lvl_at(self.x/16, (self.y+self.height)/16) == 1 or lvl_at((self.x+self.width-1)/16, (self.y+self.height)/16) == 1;
@@ -52,6 +55,7 @@ pub const Turnip = struct {
 
     pub fn update(self: *Self) void {
         var grounded = self.ontheground();
+        if (!grounded) self.ungrounded_frames += 1 else self.ungrounded_frames = 0;
 
         if (isButtonPressed(2) != 0) {
             self.xaccel = -0.1;
@@ -68,12 +72,13 @@ pub const Turnip = struct {
             self.y = @intToFloat(f32, (@floatToInt(i32, self.y/16)) * 16);
             self.yspeed = 0;
             self.yaccel = 0;
-            if (isButtonTriggered(4) != 0) {
-                playNote(300, 0);
-                self.yspeed = -4;
-            }
         } else {
             self.yaccel = 0.2;
+        }
+
+        if (isButtonTriggered(4) != 0 and self.ungrounded_frames <= JUMP_FORGIVENESS) {
+            playNote(300, 0);
+            self.yspeed = -4;
         }
 
         self.xspeed = utils.clamp(self.xspeed, -2, 2);
