@@ -47,7 +47,7 @@ pub const Turnip = struct {
 	yaccel: f32 = 0,
 
     fn ontheground(self: *Self) bool {
-        return lvl_at(self.x/16, (self.y+self.width)/16) == 1 or lvl_at((self.x+self.width-1)/16, (self.y+16)/16) == 1;
+        return lvl_at(self.x/16, (self.y+self.height)/16) == 1 or lvl_at((self.x+self.width-1)/16, (self.y+self.height)/16) == 1;
     }
 
     pub fn update(self: *Self) void {
@@ -82,13 +82,13 @@ pub const Turnip = struct {
         self.y += self.yspeed;
         self.xspeed = utils.xfriction(self.xspeed);
 
-        if (lvl_at((self.x+self.width)/16, self.y/16) == 1 and self.xspeed > 0) {
+        if (lvl_at((self.x+self.width)/16, (self.y+self.height-4)/16) == 1 and self.xspeed > 0) {
             self.x = @floor(self.x/16)*16 + 16 - self.width;
             self.xspeed = 0;
             self.xaccel = 0;
         }
 
-        if (lvl_at((self.x)/16, self.y/16) == 1 and self.xspeed < 0) {
+        if (lvl_at((self.x)/16, (self.y+self.height-4)/16) == 1 and self.xspeed < 0) {
             self.x = @floor(self.x/16)*16 + 16;
             self.xspeed = 0;
             self.xaccel = 0;
