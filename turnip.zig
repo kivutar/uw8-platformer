@@ -48,6 +48,7 @@ pub const Turnip = struct {
 	xaccel: f32 = 0,
 	yaccel: f32 = 0,
     ungrounded_frames: u8 = 0,
+    jumping_frames: u8 = 0,
 
     fn ontheground(self: *Self) bool {
         return lvl_at(self.x/16, (self.y+self.height)/16) == 1 or lvl_at((self.x+self.width-1)/16, (self.y+self.height)/16) == 1;
@@ -80,6 +81,10 @@ pub const Turnip = struct {
             playNote(300, 0);
             self.yspeed = -4;
         }
+
+        if (isButtonPressed(4) != 0 and self.yspeed < 0) self.jumping_frames += 1 else self.jumping_frames = 0;
+        if (self.jumping_frames > 1 and self.jumping_frames < 40)
+		    self.yspeed -= 0.05;
 
         self.xspeed = utils.clamp(self.xspeed, -2, 2);
         self.yspeed = utils.clamp(self.yspeed, -4, 4);
