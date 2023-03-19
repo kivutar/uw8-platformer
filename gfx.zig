@@ -1,3 +1,5 @@
+const camera = @import("camera.zig");
+
 pub const FRAMEBUFFER: *[320*240]u8 = @intToPtr(*[320*240]u8, 120);
 
 pub const Anim = struct {
@@ -13,9 +15,11 @@ pub fn blit(spr: *const [256]u8, dx: i32, dy: i32, trans: u8, flip: bool) void {
 
 	while (true) {
 		var c = if (flip) spr[15-x+y*16] else spr[x+y*16];
+		var o_x = x2 - @floatToInt(i32, camera.x);
+		var o_y = y2 - @floatToInt(i32, camera.y);
 
-		if (c != trans and x2 >= 0 and x2 < 320 and y2 >= 0 and y2 <= 240) {
-			FRAMEBUFFER[@intCast(u32, x2+y2*320)] = c;
+		if (c != trans and o_x >= 0 and o_x < 320 and o_y >= 0 and o_y <= 240) {
+			FRAMEBUFFER[@intCast(u32, o_x+o_y*320)] = c;
 		}
 
 		x += 1;

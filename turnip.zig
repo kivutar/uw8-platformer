@@ -35,8 +35,8 @@ fn lvl_at(x: f32, y: f32) i32 {
 pub const Turnip = struct {
     const Self = @This();
 
-    x:      f32,
-	y:      f32,
+    x:    f32,
+	y:    f32,
 	width:  f32,
 	height: f32,
     anim:   *gfx.Anim = undefined,
@@ -94,6 +94,8 @@ pub const Turnip = struct {
             self.xaccel = 0;
         }
 
+        self.x = utils.clamp(self.x, 0, @intToFloat(f32, map.lvl[0].len*16) - self.width);
+
         if (self.xspeed > 0) {
             self.flip = true;
         } else if (self.xspeed < 0) {
@@ -114,4 +116,11 @@ pub const Turnip = struct {
     pub fn draw(self: *Self) void {
         gfx.blit(&self.anim.frames[(self.anim.counter/8)%self.anim.frames.len][0], @floatToInt(i32, self.x)-2, @floatToInt(i32, self.y), 0xe8, self.flip);
     }
+};
+
+pub var tur1  = Turnip{
+	.x = 32,
+	.y = 32,
+	.width = 12,
+	.height = 16,
 };
