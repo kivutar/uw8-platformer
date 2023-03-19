@@ -1,14 +1,16 @@
 const std = @import("std");
 
 pub fn build(b: *std.build.Builder) void {
-    const mode = std.builtin.Mode.ReleaseSmall;
-
-    const lib = b.addSharedLibrary("cart", "main.zig", .unversioned);
-    lib.setBuildMode(mode);
-    lib.setTarget(.{
-        .cpu_arch = .wasm32,
-        .os_tag = .freestanding,
+    const lib = b.addSharedLibrary(.{
+        .name = "cart",
+        .root_source_file = .{ .path = "main.zig" },
+        .target = .{
+            .cpu_arch = .wasm32,
+            .os_tag = .freestanding,
+        },
+        .optimize = std.builtin.Mode.ReleaseSmall,
     });
+    lib.rdynamic = true;
     lib.import_memory = true;
     lib.initial_memory = 262144;
     lib.max_memory = 262144;

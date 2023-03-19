@@ -29,16 +29,14 @@ export fn upd() void {
 }
 
 fn draw() void {
-	var row_i: usize = 0;
-	for (map.lvl) |row| {
-		var col_i: usize = 0;
-		for (row) |cell| {
-			if (cell == 1) {
-				gfx.blit(&sprites.block_spr, @intCast(i32, col_i)*16, @intCast(i32, row_i)*16, 0x00, false);
+	for (0..map.lvl.len) |y| {
+		for (0..map.lvl[0].len) |x| {
+			if (map.lvl[y][x] == 1 and map.lvl[y-1][x] != 1) {
+				gfx.blit(&sprites.herb, @intCast(i32, x)*16, @intCast(i32, y)*16, 0x00, false);
+			} else if (map.lvl[y][x] == 1) {
+				gfx.blit(&sprites.block_spr, @intCast(i32, x)*16, @intCast(i32, y)*16, 0x00, false);
 			}
-			col_i += 1;
 		}
-		row_i += 1;
 	}
 
 	turnip.tur1.draw();
