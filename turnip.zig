@@ -5,25 +5,25 @@ const utils = @import("utils.zig");
 
 const JUMP_FORGIVENESS = 4;
 
-var turnip_run_anim = gfx.Anim {
-	.frames = &[_][256]u8{
-		sprites.turnip_spr0,
-		sprites.turnip_spr1,
-		sprites.turnip_spr2,
-		sprites.turnip_spr1,
-	},
+var turnip_run_anim = gfx.Anim{
+    .frames = &[_][256]u8{
+        sprites.turnip_spr0,
+        sprites.turnip_spr1,
+        sprites.turnip_spr2,
+        sprites.turnip_spr1,
+    },
 };
 
-var turnip_stand_anim = gfx.Anim {
-	.frames = &[_][256]u8{
-		sprites.turnip_spr3,
-	},
+var turnip_stand_anim = gfx.Anim{
+    .frames = &[_][256]u8{
+        sprites.turnip_spr3,
+    },
 };
 
-var turnip_jump_anim = gfx.Anim {
-	.frames = &[_][256]u8{
-		sprites.turnip_spr0,
-	},
+var turnip_jump_anim = gfx.Anim{
+    .frames = &[_][256]u8{
+        sprites.turnip_spr0,
+    },
 };
 
 extern fn isButtonPressed(btn: i32) i32;
@@ -37,21 +37,21 @@ fn lvl_at(x: f32, y: f32) i32 {
 pub const Turnip = struct {
     const Self = @This();
 
-    x:    f32,
-	y:    f32,
-	width:  f32,
-	height: f32,
-    anim:   *gfx.Anim = undefined,
-    flip:   bool = false,
-	xspeed: f32 = 0,
-	yspeed: f32 = 0,
-	xaccel: f32 = 0,
-	yaccel: f32 = 0,
+    x: f32,
+    y: f32,
+    width: f32,
+    height: f32,
+    anim: *gfx.Anim = undefined,
+    flip: bool = false,
+    xspeed: f32 = 0,
+    yspeed: f32 = 0,
+    xaccel: f32 = 0,
+    yaccel: f32 = 0,
     ungrounded_frames: u8 = 0,
     jumping_frames: u8 = 0,
 
     fn ontheground(self: *Self) bool {
-        return lvl_at(self.x/16, (self.y+self.height)/16) != 0 or lvl_at((self.x+self.width-1)/16, (self.y+self.height)/16) != 0;
+        return lvl_at(self.x / 16, (self.y + self.height) / 16) != 0 or lvl_at((self.x + self.width - 1) / 16, (self.y + self.height) / 16) != 0;
     }
 
     pub fn update(self: *Self) void {
@@ -70,7 +70,7 @@ pub const Turnip = struct {
         self.yspeed += self.yaccel;
 
         if (grounded and self.yspeed >= 0) {
-            self.y = @intToFloat(f32, (@floatToInt(i32, self.y/16)) * 16);
+            self.y = @intToFloat(f32, (@floatToInt(i32, self.y / 16)) * 16);
             self.yspeed = 0;
             self.yaccel = 0;
         } else {
@@ -84,7 +84,7 @@ pub const Turnip = struct {
 
         if (isButtonPressed(4) != 0 and self.yspeed < 0) self.jumping_frames += 1 else self.jumping_frames = 0;
         if (self.jumping_frames > 1 and self.jumping_frames < 40)
-		    self.yspeed -= 0.05;
+            self.yspeed -= 0.05;
 
         self.xspeed = utils.clamp(self.xspeed, -2, 2);
         self.yspeed = utils.clamp(self.yspeed, -4, 4);
@@ -92,19 +92,19 @@ pub const Turnip = struct {
         self.y += self.yspeed;
         self.xspeed = utils.xfriction(self.xspeed);
 
-        if (lvl_at((self.x+self.width)/16, (self.y+self.height-4)/16) != 0 and self.xspeed > 0) {
-            self.x = @floor(self.x/16)*16 + 16 - self.width;
+        if (lvl_at((self.x + self.width) / 16, (self.y + self.height - 4) / 16) != 0 and self.xspeed > 0) {
+            self.x = @floor(self.x / 16) * 16 + 16 - self.width;
             self.xspeed = 0;
             self.xaccel = 0;
         }
 
-        if (lvl_at((self.x)/16, (self.y+self.height-4)/16) != 0 and self.xspeed < 0) {
-            self.x = @floor(self.x/16)*16 + 16;
+        if (lvl_at((self.x) / 16, (self.y + self.height - 4) / 16) != 0 and self.xspeed < 0) {
+            self.x = @floor(self.x / 16) * 16 + 16;
             self.xspeed = 0;
             self.xaccel = 0;
         }
 
-        self.x = utils.clamp(self.x, 0, @intToFloat(f32, map.lvl[0].len*16) - self.width);
+        self.x = utils.clamp(self.x, 0, @intToFloat(f32, map.lvl[0].len * 16) - self.width);
 
         if (self.xspeed > 0) {
             self.flip = true;
@@ -124,13 +124,13 @@ pub const Turnip = struct {
     }
 
     pub fn draw(self: *Self) void {
-        gfx.blit(&(self.anim.frames[(self.anim.counter/8)%self.anim.frames.len]), @floatToInt(i32, self.x)-2, @floatToInt(i32, self.y), 0xe8, self.flip);
+        gfx.blit(&(self.anim.frames[(self.anim.counter / 8) % self.anim.frames.len]), @floatToInt(i32, self.x) - 2, @floatToInt(i32, self.y), 0xe8, self.flip);
     }
 };
 
-pub var tur1  = Turnip{
-	.x = 32,
-	.y = 32,
-	.width = 12,
-	.height = 16,
+pub var tur1 = Turnip{
+    .x = 32,
+    .y = 32,
+    .width = 12,
+    .height = 16,
 };
