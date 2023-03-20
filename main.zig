@@ -6,19 +6,6 @@ const camera = @import("camera.zig");
 
 extern fn cls(color: i32) void;
 
-const Rigid = struct {
-    x: f32,
-    y: f32,
-    width: f32,
-    height: f32,
-    speed: f32,
-    angle: f32,
-    xspeed: f32,
-    yspeed: f32,
-    xaccel: f32,
-    yaccel: f32,
-};
-
 export fn upd() void {
     cls(44);
 
