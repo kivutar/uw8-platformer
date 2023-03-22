@@ -36,8 +36,8 @@ pub const Turnip = struct {
 
     x: f32,
     y: f32,
-    width: f32,
-    height: f32,
+    width: f32 = 12,
+    height: f32 = 16,
     anim: *gfx.Anim = undefined,
     flip: bool = false,
     xspeed: f32 = 0,
@@ -51,8 +51,6 @@ pub const Turnip = struct {
         return .{
             .x = x,
             .y = y,
-            .width = 12,
-            .height = 16,
             .entity = entity.Entity{
                 .updateFn = @ptrCast(entity.Entity.UpdateFn, &update),
                 .drawFn = @ptrCast(entity.Entity.DrawFn, &draw),

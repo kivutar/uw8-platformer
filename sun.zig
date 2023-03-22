@@ -11,8 +11,6 @@ pub const Sun = struct {
     y: f32,
     width: f32 = 16,
     height: f32 = 16,
-    xspeed: f32 = 0,
-    yspeed: f32 = 0,
 
     pub fn init(x: f32, y: f32) Sun {
         return .{
