@@ -15,22 +15,12 @@ pub const Sun = struct {
     yspeed: f32 = 0,
 
     pub fn init(x: f32, y: f32) Sun {
-        const impl = struct {
-            pub fn update(ptr: *entity.Entity) void {
-                const self = @fieldParentPtr(Sun, "entity", ptr);
-                self.update();
-            }
-            pub fn draw(ptr: *entity.Entity) void {
-                const self = @fieldParentPtr(Sun, "entity", ptr);
-                self.draw();
-            }
-        };
         return .{
             .x = x,
             .y = y,
             .entity = entity.Entity{
-                .updateFn = impl.update,
-                .drawFn = impl.draw,
+                .updateFn = @ptrCast(entity.Entity.UpdateFn, &update),
+                .drawFn = @ptrCast(entity.Entity.DrawFn, &draw),
             },
         };
     }

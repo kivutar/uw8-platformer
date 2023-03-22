@@ -48,24 +48,14 @@ pub const Turnip = struct {
     jumping_frames: u8 = 0,
 
     pub fn init(x: f32, y: f32) Turnip {
-        const impl = struct {
-            pub fn update(ptr: *entity.Entity) void {
-                const self = @fieldParentPtr(Turnip, "entity", ptr);
-                self.update();
-            }
-            pub fn draw(ptr: *entity.Entity) void {
-                const self = @fieldParentPtr(Turnip, "entity", ptr);
-                self.draw();
-            }
-        };
         return .{
             .x = x,
             .y = y,
             .width = 12,
             .height = 16,
             .entity = entity.Entity{
-                .updateFn = impl.update,
-                .drawFn = impl.draw,
+                .updateFn = @ptrCast(entity.Entity.UpdateFn, &update),
+                .drawFn = @ptrCast(entity.Entity.DrawFn, &draw),
             },
         };
     }
