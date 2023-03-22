@@ -4,10 +4,6 @@ const gfx = @import("gfx.zig");
 const utils = @import("utils.zig");
 const entity = @import("entity.zig");
 
-fn lvl_at(x: f32, y: f32) i32 {
-    return map.lvl[@floatToInt(usize, y)][@floatToInt(usize, x)];
-}
-
 pub const Sun = struct {
     entity: entity.Entity,
 
