@@ -1,0 +1,49 @@
+const sprites = @import("sprites.zig");
+const map = @import("map.zig");
+const gfx = @import("gfx.zig");
+const utils = @import("utils.zig");
+const entity = @import("entity.zig");
+
+fn lvl_at(x: f32, y: f32) i32 {
+    return map.lvl[@floatToInt(usize, y)][@floatToInt(usize, x)];
+}
+
+pub const Sun = struct {
+    entity: entity.Entity,
+
+    x: f32,
+    y: f32,
+    width: f32 = 16,
+    height: f32 = 16,
+    xspeed: f32 = 0,
+    yspeed: f32 = 0,
+
+    pub fn init(x: f32, y: f32) Sun {
+        const impl = struct {
+            pub fn update(ptr: *entity.Entity) void {
+                const self = @fieldParentPtr(Sun, "entity", ptr);
+                self.update();
+            }
+            pub fn draw(ptr: *entity.Entity) void {
+                const self = @fieldParentPtr(Sun, "entity", ptr);
+                self.draw();
+            }
+        };
+        return .{
+            .x = x,
+            .y = y,
+            .entity = entity.Entity{
+                .updateFn = impl.update,
+                .drawFn = impl.draw,
+            },
+        };
+    }
+
+    pub fn update(self: *Sun) void {
+        self.x += 0.01;
+    }
+
+    pub fn draw(self: *Sun) void {
+        gfx.blit(&sprites.skull, @floatToInt(i32, self.x), @floatToInt(i32, self.y), 0xe8, false);
+    }
+};

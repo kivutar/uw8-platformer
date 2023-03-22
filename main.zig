@@ -1,16 +1,29 @@
 const sprites = @import("sprites.zig");
 const map = @import("map.zig");
 const gfx = @import("gfx.zig");
-const turnip = @import("turnip.zig");
+const entity = @import("entity.zig");
 const camera = @import("camera.zig");
+const turnip = @import("turnip.zig");
+const sun = @import("sun.zig");
 
 extern fn cls(color: i32) void;
+
+var sun1 = sun.Sun.init(32, 32);
+var tur1 = turnip.Turnip.init(32, 32);
+
+var entities = [_]*entity.Entity{
+    &sun1.entity,
+    &tur1.entity,
+};
 
 export fn upd() void {
     cls(44);
 
-    turnip.tur1.update();
-    camera.update();
+    for (entities) |e| {
+        e.update();
+    }
+
+    camera.update(tur1.x + tur1.width / 2, tur1.y + tur1.height / 2);
 
     draw();
 }
@@ -32,5 +45,7 @@ fn draw() void {
         }
     }
 
-    turnip.tur1.draw();
+    for (entities) |e| {
+        e.draw();
+    }
 }

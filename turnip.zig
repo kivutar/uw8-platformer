@@ -2,6 +2,7 @@ const sprites = @import("sprites.zig");
 const map = @import("map.zig");
 const gfx = @import("gfx.zig");
 const utils = @import("utils.zig");
+const entity = @import("entity.zig");
 
 const JUMP_FORGIVENESS = 4;
 
@@ -35,7 +36,7 @@ fn lvl_at(x: f32, y: f32) i32 {
 }
 
 pub const Turnip = struct {
-    const Self = @This();
+    entity: entity.Entity,
 
     x: f32,
     y: f32,
@@ -50,11 +51,34 @@ pub const Turnip = struct {
     ungrounded_frames: u8 = 0,
     jumping_frames: u8 = 0,
 
-    fn ontheground(self: *Self) bool {
+    pub fn init(x: f32, y: f32) Turnip {
+        const impl = struct {
+            pub fn update(ptr: *entity.Entity) void {
+                const self = @fieldParentPtr(Turnip, "entity", ptr);
+                self.update();
+            }
+            pub fn draw(ptr: *entity.Entity) void {
+                const self = @fieldParentPtr(Turnip, "entity", ptr);
+                self.draw();
+            }
+        };
+        return .{
+            .x = x,
+            .y = y,
+            .width = 12,
+            .height = 16,
+            .entity = entity.Entity{
+                .updateFn = impl.update,
+                .drawFn = impl.draw,
+            },
+        };
+    }
+
+    fn ontheground(self: *Turnip) bool {
         return lvl_at(self.x / 16, (self.y + self.height) / 16) != 0 or lvl_at((self.x + self.width - 1) / 16, (self.y + self.height) / 16) != 0;
     }
 
-    pub fn update(self: *Self) void {
+    pub fn update(self: *Turnip) void {
         var grounded = self.ontheground();
         if (!grounded) self.ungrounded_frames += 1 else self.ungrounded_frames = 0;
 
@@ -123,14 +147,7 @@ pub const Turnip = struct {
         self.anim.counter += 1;
     }
 
-    pub fn draw(self: *Self) void {
+    pub fn draw(self: *Turnip) void {
         gfx.blit(&(self.anim.frames[(self.anim.counter / 8) % self.anim.frames.len]), @floatToInt(i32, self.x) - 2, @floatToInt(i32, self.y), 0xe8, self.flip);
     }
-};
-
-pub var tur1 = Turnip{
-    .x = 32,
-    .y = 32,
-    .width = 12,
-    .height = 16,
 };
