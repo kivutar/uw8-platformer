@@ -86,8 +86,10 @@ pub const Turnip = struct {
         }
 
         if (isButtonTriggered(4) != 0 and self.ungrounded_frames <= JUMP_FORGIVENESS) {
-            playNote(300, 0);
             self.yspeed = -4;
+            playNote(3, 60);
+        } else {
+            playNote(3, 0);
         }
 
         if (isButtonPressed(4) != 0 and self.yspeed < 0) self.jumping_frames += 1 else self.jumping_frames = 0;

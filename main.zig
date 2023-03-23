@@ -6,7 +6,12 @@ const camera = @import("camera.zig");
 const turnip = @import("turnip.zig");
 const sun = @import("sun.zig");
 
-extern fn cls(color: i32) void;
+extern fn cls(i32) void;
+extern fn random() i32;
+extern fn circle(f32, f32, f32, i32) void;
+extern fn cos(f64) f64;
+extern fn setPixel(x: i32, y: i32, color: i32) void;
+extern fn randomSeed(i32) void;
 
 var sun1 = sun.Sun.init(32, 32);
 var tur1 = turnip.Turnip.init(32, 32);
@@ -16,8 +21,18 @@ var entities = [_]*entity.Entity{
     &tur1.entity,
 };
 
+var sky = [_]i32{0} ** 64;
+
+var frames: f32 = 0;
+
 export fn upd() void {
-    cls(44);
+    frames += 1;
+    if (frames == 1) {
+        randomSeed(123);
+        for (0..sky.len) |i| {
+            sky[i] = random();
+        }
+    }
 
     for (entities) |e| {
         e.update();
@@ -28,7 +43,45 @@ export fn upd() void {
     draw();
 }
 
+fn draw_clouds() void {
+    for (0..map.lvl.len) |y| {
+        for (0..map.lvl[0].len) |x| {
+            for (2..4) |s| {
+                var fs = @intToFloat(f32, s * 8);
+                if (sky[(x * y + s) % sky.len] > y * 16 * @sizeOf(i64)) {
+                    var fx = @intToFloat(f32, x);
+                    var fy = @intToFloat(f32, y);
+                    if (fy * 16 > cos(fx * 16 / 40) * 40 + 240 - 100 + fs) {
+                        var cosize = fs + @floatCast(f32, cos(frames / 30 + fx));
+                        circle(fx * 16 - 32 + fx, fy * 16, cosize, 232);
+                    }
+                }
+            }
+        }
+    }
+
+    for (0..map.lvl.len) |y| {
+        for (0..map.lvl[0].len) |x| {
+            for (2..4) |s| {
+                var fs = @intToFloat(f32, s * 8);
+                if (sky[(x * y + s - 100) % sky.len] > y * 16 * @sizeOf(i64)) {
+                    var fx = @intToFloat(f32, x);
+                    var fy = @intToFloat(f32, y);
+                    if (fy * 16 > cos(fx * 16 / 40) * 40 + 240 - 100 + fs) {
+                        var cosize = fs + @floatCast(f32, cos(frames / 30 + fx));
+                        circle(fx * 16 - 100, fy * 16 + 30, cosize, 191);
+                    }
+                }
+            }
+        }
+    }
+}
+
 fn draw() void {
+    cls(77);
+
+    draw_clouds();
+
     for (0..map.lvl.len) |y| {
         for (0..map.lvl[0].len) |x| {
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {
