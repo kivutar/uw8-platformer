@@ -108,10 +108,15 @@ pub const Turnip = struct {
             self.xaccel = 0;
         }
 
-        if (map.at((self.x) / 16, (self.y + self.height - 4) / 16) != 0 and self.xspeed < 0) {
+        if (map.at(self.x / 16, (self.y + self.height - 4) / 16) != 0 and self.xspeed < 0) {
             self.x = @floor(self.x / 16) * 16 + 16;
             self.xspeed = 0;
             self.xaccel = 0;
+        }
+
+        if ((map.at(self.x / 16, self.y / 16) != 0 or map.at((self.x + self.width - 1) / 16, self.y / 16) != 0) and self.yspeed < 0) {
+            self.y = @floor(self.y / 16) * 16 + self.height;
+            self.yspeed = 0;
         }
 
         self.x = utils.clamp(self.x, 0, @intToFloat(f32, map.lvl[0].len * 16) - self.width);
