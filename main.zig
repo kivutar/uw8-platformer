@@ -76,7 +76,7 @@ fn draw() void {
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {
                 gfx.blit(&sprites.herb, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0x00, false);
             } else if (map.lvl[y][x] == 1) {
-                gfx.blit(&sprites.block_spr, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0x00, false);
+                gfx.blit(&sprites.block, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0x00, false);
             } else if (map.lvl[y][x] == 2) {
                 gfx.blit(&sprites.skull, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0xe8, false);
             }
