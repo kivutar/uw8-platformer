@@ -1,6 +1,10 @@
 const std = @import("std");
 
 pub fn build(b: *std.build.Builder) void {
+    const assets = b.addSystemCommand(&[_][]const u8{
+        "sh", "-c", "go run png2src.go assets/* >> assets.zig",
+    });
+
     const lib = b.addSharedLibrary(.{
         .name = "cart",
         .root_source_file = .{ .path = "main.zig" },
@@ -17,6 +21,7 @@ pub fn build(b: *std.build.Builder) void {
     lib.global_base = 81920;
     lib.stack_size = 8192;
     lib.install();
+    lib.step.dependOn(&assets.step);
 
     if (lib.install_step) |install_step| {
         const run_filter_exports = b.addSystemCommand(&[_][]const u8{ "uw8", "filter-exports", "zig-out/lib/cart.wasm", "zig-out/lib/cart-filtered.wasm" });
