@@ -1,8 +1,8 @@
 all: sprites.zig
 	zig build
 
-sprites.zig: $(wildcard *.png)
-	for file in $^; do go run png2src.go $$file >> $@; done
+sprites.zig: $(wildcard assets/*.png)
+	for f in $^; do go run png2src.go $$f >> $@; done
 
 clean:
-	rm sprites.zig
+	rm -f sprites.zig

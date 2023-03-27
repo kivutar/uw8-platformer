@@ -18,6 +18,7 @@ func indexOf(c color.Color, pal []color.Color) int {
 }
 
 func noExt(fileName string) string {
+	fileName = filepath.Base(fileName)
 	return fileName[:len(fileName)-len(filepath.Ext(fileName))]
 }
 
