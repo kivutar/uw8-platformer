@@ -2,7 +2,7 @@ const std = @import("std");
 
 pub fn build(b: *std.build.Builder) void {
     const assets = b.addSystemCommand(&[_][]const u8{
-        "sh", "-c", "go run png2src.go assets/* >> assets.zig",
+        "sh", "-c", "rm sprites.zig && go run png2src.go assets/*.png >> sprites.zig",
     });
 
     const lib = b.addSharedLibrary(.{
