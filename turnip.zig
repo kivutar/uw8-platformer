@@ -31,6 +31,11 @@ extern fn isButtonPressed(btn: i32) i32;
 extern fn isButtonTriggered(btn: i32) i32;
 extern fn playNote(channel: i32, note: i32) void;
 
+fn solid_at(x: f32, y: f32) bool {
+    var tile = map.at(x, y);
+    return tile == 1 or tile == 2;
+}
+
 pub const Turnip = struct {
     entity: entity.Entity,
 
@@ -59,7 +64,7 @@ pub const Turnip = struct {
     }
 
     fn ontheground(self: *Turnip) bool {
-        return map.at(self.x / 16, (self.y + self.height) / 16) != 0 or map.at((self.x + self.width - 1) / 16, (self.y + self.height) / 16) != 0;
+        return solid_at(self.x / 16, (self.y + self.height) / 16) or solid_at((self.x + self.width - 1) / 16, (self.y + self.height) / 16);
     }
 
     pub fn update(self: *Turnip) void {
@@ -102,19 +107,19 @@ pub const Turnip = struct {
         self.y += self.yspeed;
         self.xspeed = utils.xfriction(self.xspeed);
 
-        if (map.at((self.x + self.width) / 16, (self.y + self.height - 4) / 16) != 0 and self.xspeed > 0) {
+        if (solid_at((self.x + self.width) / 16, (self.y + self.height - 4) / 16) and self.xspeed > 0) {
             self.x = @floor(self.x / 16) * 16 + 16 - self.width;
             self.xspeed = 0;
             self.xaccel = 0;
         }
 
-        if (map.at(self.x / 16, (self.y + self.height - 4) / 16) != 0 and self.xspeed < 0) {
+        if (solid_at(self.x / 16, (self.y + self.height - 4) / 16) and self.xspeed < 0) {
             self.x = @floor(self.x / 16) * 16 + 16;
             self.xspeed = 0;
             self.xaccel = 0;
         }
 
-        if ((map.at(self.x / 16, self.y / 16) != 0 or map.at((self.x + self.width - 1) / 16, self.y / 16) != 0) and self.yspeed < 0) {
+        if ((solid_at(self.x / 16, self.y / 16) or solid_at((self.x + self.width - 1) / 16, self.y / 16)) and self.yspeed < 0) {
             self.y = @floor(self.y / 16) * 16 + self.height;
             self.yspeed = 0;
         }

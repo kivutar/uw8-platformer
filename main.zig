@@ -23,6 +23,15 @@ var entities = [_]*entity.Entity{
 
 var sky = [_]i32{0} ** 64;
 
+var waterfall_anim = gfx.Anim{
+    .frames = &[_][256]u8{
+        sprites.waterfall1,
+        sprites.waterfall2,
+        sprites.waterfall3,
+        sprites.waterfall4,
+    },
+};
+
 var frames: f32 = 0;
 
 export fn upd() void {
@@ -37,6 +46,8 @@ export fn upd() void {
     for (entities) |e| {
         e.update();
     }
+
+    waterfall_anim.counter += 1;
 
     camera.update(tur1.x + tur1.width / 2, tur1.y + tur1.height / 2);
 
@@ -79,6 +90,8 @@ fn draw() void {
                 gfx.blit(&sprites.block, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0x00, false);
             } else if (map.lvl[y][x] == 2) {
                 gfx.blit(&sprites.skull, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0xe8, false);
+            } else if (map.lvl[y][x] == 3) {
+                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0xe8, false);
             }
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rect(@intCast(i32, x) * 16, @intCast(i32, y) * 16, 16, 1, 176);
             if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rect(@intCast(i32, x) * 16, @intCast(i32, y + 1) * 16 - 1, 16, 1, 176);
