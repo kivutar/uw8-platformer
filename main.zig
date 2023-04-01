@@ -4,7 +4,7 @@ const gfx = @import("gfx.zig");
 const entity = @import("entity.zig");
 const camera = @import("camera.zig");
 const turnip = @import("turnip.zig");
-const sun = @import("sun.zig");
+// const sun = @import("sun.zig");
 
 extern fn cls(i32) void;
 extern fn random() i32;
@@ -12,11 +12,11 @@ extern fn circle(f32, f32, f32, i32) void;
 extern fn cos(f64) f64;
 extern fn randomSeed(i32) void;
 
-var sun1 = sun.Sun.init(32, 32);
+// var sun1 = sun.Sun.init(32, 32);
 var tur1 = turnip.Turnip.init(64, 240 - 32 - 16);
 
 var entities = [_]*entity.Entity{
-    &sun1.entity,
+    // &sun1.entity,
     &tur1.entity,
 };
 
@@ -85,7 +85,6 @@ fn draw() void {
         for (0..map.lvl[0].len) |x| {
             const tx = @intCast(i32, x) * 16;
             const ty = @intCast(i32, y) * 16;
-
             if (tx + 16 < camera.xi or tx > camera.xi + 320) continue;
 
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {

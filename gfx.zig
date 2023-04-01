@@ -18,7 +18,7 @@ pub fn blit(spr: *const [256]u8, dx: i32, dy: i32, trans: u8, flip: bool) void {
         var o_x = x2 - camera.xi;
         var o_y = y2 - camera.yi;
 
-        if (c != trans and o_x >= 0 and o_x < 320 and o_y >= 0 and o_y <= 240) {
+        if (c != trans and o_x >= 0 and o_x < 320 and o_y >= 0 and o_y < 240) {
             FRAMEBUFFER[@intCast(u32, o_x + o_y * 320)] = c;
         }
 
@@ -30,9 +30,7 @@ pub fn blit(spr: *const [256]u8, dx: i32, dy: i32, trans: u8, flip: bool) void {
             x2 = dx;
             y += 1;
             y2 += 1;
-        }
-        if (y >= 16) {
-            break;
+            if (y >= 16) break;
         }
     }
 }
@@ -44,10 +42,10 @@ pub fn rect(dx: i32, dy: i32, w: i32, h: i32, c: u8) void {
     var y2: i32 = dy;
 
     while (true) {
-        var o_x = x2 - @floatToInt(i32, camera.x);
-        var o_y = y2 - @floatToInt(i32, camera.y);
+        var o_x = x2 - camera.xi;
+        var o_y = y2 - camera.yi;
 
-        if (o_x >= 0 and o_x < 320 and o_y >= 0 and o_y <= 240) {
+        if (o_x >= 0 and o_x < 320 and o_y >= 0 and o_y < 240) {
             FRAMEBUFFER[@intCast(u32, o_x + o_y * 320)] = c;
         }
 
@@ -59,9 +57,7 @@ pub fn rect(dx: i32, dy: i32, w: i32, h: i32, c: u8) void {
             x2 = dx;
             y += 1;
             y2 += 1;
-        }
-        if (y >= h) {
-            break;
+            if (y >= h) break;
         }
     }
 }

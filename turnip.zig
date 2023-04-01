@@ -144,6 +144,6 @@ pub const Turnip = struct {
     }
 
     pub fn draw(self: *Turnip) void {
-        gfx.blit(&(self.anim.frames[(self.anim.counter / 8) % self.anim.frames.len]), @floatToInt(i32, self.x) - 2, @floatToInt(i32, self.y), 0xe8, self.flip);
+        gfx.blit(&(self.anim.frames[(self.anim.counter / 6) % self.anim.frames.len]), @floatToInt(i32, self.x) - 2, @floatToInt(i32, self.y), 0xe8, self.flip);
     }
 };
