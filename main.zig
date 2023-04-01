@@ -10,7 +10,6 @@ extern fn cls(i32) void;
 extern fn random() i32;
 extern fn circle(f32, f32, f32, i32) void;
 extern fn cos(f64) f64;
-extern fn setPixel(x: i32, y: i32, color: i32) void;
 extern fn randomSeed(i32) void;
 
 var sun1 = sun.Sun.init(32, 32);
@@ -80,10 +79,14 @@ fn draw_clouds() void {
 fn draw() void {
     cls(77);
 
-    draw_clouds();
+    //draw_clouds();
+
+    const camx = @floatToInt(i32, camera.x);
 
     for (0..map.lvl.len) |y| {
         for (0..map.lvl[0].len) |x| {
+            if (x * 16 - 16 < camx or x * 16 > camx + 320) continue;
+
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {
                 gfx.blit(&sprites.herb, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0x00, false);
             } else if (map.lvl[y][x] == 1) {
