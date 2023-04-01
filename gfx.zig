@@ -15,8 +15,8 @@ pub fn blit(spr: *const [256]u8, dx: i32, dy: i32, trans: u8, flip: bool) void {
 
     while (true) {
         var c = if (flip) spr[15 - x + y * 16] else spr[x + y * 16];
-        var o_x = x2 - @floatToInt(i32, camera.x);
-        var o_y = y2 - @floatToInt(i32, camera.y);
+        var o_x = x2 - camera.xi;
+        var o_y = y2 - camera.yi;
 
         if (c != trans and o_x >= 0 and o_x < 320 and o_y >= 0 and o_y <= 240) {
             FRAMEBUFFER[@intCast(u32, o_x + o_y * 320)] = c;

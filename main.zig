@@ -81,25 +81,26 @@ fn draw() void {
 
     //draw_clouds();
 
-    const camx = @floatToInt(i32, camera.x);
-
     for (0..map.lvl.len) |y| {
         for (0..map.lvl[0].len) |x| {
-            if (x * 16 - 16 < camx or x * 16 > camx + 320) continue;
+            const tx = @intCast(i32, x) * 16;
+            const ty = @intCast(i32, y) * 16;
+
+            if (tx + 16 < camera.xi or tx > camera.xi + 320) continue;
 
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {
-                gfx.blit(&sprites.herb, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0x00, false);
+                gfx.blit(&sprites.herb, tx, ty, 0x00, false);
             } else if (map.lvl[y][x] == 1) {
-                gfx.blit(&sprites.block, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0x00, false);
+                gfx.blit(&sprites.block, tx, ty, 0x00, false);
             } else if (map.lvl[y][x] == 2) {
-                gfx.blit(&sprites.skull, @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0xe8, false);
+                gfx.blit(&sprites.skull, tx, ty, 0xe8, false);
             } else if (map.lvl[y][x] == 3) {
-                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], @intCast(i32, x) * 16, @intCast(i32, y) * 16, 0xe8, false);
+                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], tx, ty, 0xe8, false);
             }
-            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rect(@intCast(i32, x) * 16, @intCast(i32, y) * 16, 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rect(@intCast(i32, x) * 16, @intCast(i32, y + 1) * 16 - 1, 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rect(@intCast(i32, x) * 16, @intCast(i32, y) * 16, 1, 16, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rect(@intCast(i32, x + 1) * 16 - 1, @intCast(i32, y) * 16, 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rect(tx, ty, 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rect(tx, ty + 15, 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rect(tx, ty, 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rect(tx + 15, ty, 1, 16, 176);
         }
     }
 

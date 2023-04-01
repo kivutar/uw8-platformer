@@ -5,6 +5,9 @@ const map = @import("map.zig");
 pub var x: f32 = 0;
 pub var y: f32 = 0;
 
+pub var xi: i32 = 0;
+pub var yi: i32 = 0;
+
 pub fn update(tx: f32, ty: f32) void {
     var next_x: f32 = 0;
     var next_y: f32 = 0;
@@ -17,4 +20,7 @@ pub fn update(tx: f32, ty: f32) void {
 
     x = x - (x - next_x) / 8;
     y = y - (y - next_y) / 8;
+
+    xi = @floatToInt(i32, x);
+    yi = @floatToInt(i32, y);
 }
