@@ -3,6 +3,7 @@ const map = @import("map.zig");
 const gfx = @import("gfx.zig");
 const utils = @import("utils.zig");
 const entity = @import("entity.zig");
+const camera = @import("camera.zig");
 
 pub const Sun = struct {
     entity: entity.Entity,
@@ -28,6 +29,6 @@ pub const Sun = struct {
     }
 
     pub fn draw(self: *Sun) void {
-        gfx.blit(&sprites.skull, @floatToInt(i32, self.x), @floatToInt(i32, self.y), 0xe8, false);
+        gfx.blit(&sprites.skull, @floatToInt(i32, self.x) - camera.xi, @floatToInt(i32, self.y) - camera.yi, 0xe8, false);
     }
 };

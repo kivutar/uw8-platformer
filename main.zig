@@ -79,7 +79,7 @@ fn draw_clouds() void {
 fn draw() void {
     cls(77);
 
-    //draw_clouds();
+    // draw_clouds();
 
     for (0..map.lvl.len) |y| {
         for (0..map.lvl[0].len) |x| {
@@ -88,18 +88,18 @@ fn draw() void {
             if (tx + 16 < camera.xi or tx > camera.xi + 320) continue;
 
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {
-                gfx.blit(&sprites.herb, tx, ty, 0x00, false);
+                gfx.blit(&sprites.herb, tx - camera.xi, ty - camera.yi, 0x00, false);
             } else if (map.lvl[y][x] == 1) {
-                gfx.blit(&sprites.block, tx, ty, 0x00, false);
+                gfx.blit(&sprites.block, tx - camera.xi, ty - camera.yi, 0x00, false);
             } else if (map.lvl[y][x] == 2) {
-                gfx.blit(&sprites.skull, tx, ty, 0xe8, false);
+                gfx.blit(&sprites.skull, tx - camera.xi, ty - camera.yi, 0xe8, false);
             } else if (map.lvl[y][x] == 3) {
-                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], tx, ty, 0xe8, false);
+                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], tx - camera.xi, ty - camera.yi, 0xe8, false);
             }
-            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rect(tx, ty, 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rect(tx, ty + 15, 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rect(tx, ty, 1, 16, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rect(tx + 15, ty, 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rect(tx - camera.xi, ty - camera.yi, 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rect(tx - camera.xi, ty - camera.yi + 15, 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rect(tx - camera.xi, ty - camera.yi, 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rect(tx - camera.xi + 15, ty - camera.yi, 1, 16, 176);
         }
     }
 
