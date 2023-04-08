@@ -29,6 +29,6 @@ pub const Sun = struct {
     }
 
     pub fn draw(self: *Sun) void {
-        gfx.blit(&sprites.skull, @floatToInt(i32, self.x) - camera.xi, @floatToInt(i32, self.y) - camera.yi, 0xe8, false);
+        gfx.blit(&sprites.skull, 16, @floatToInt(i32, self.x) - camera.xi, @floatToInt(i32, self.y) - camera.yi, 0xe8 | (1 << 8));
     }
 };

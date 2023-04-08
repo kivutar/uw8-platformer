@@ -88,18 +88,18 @@ fn draw() void {
             if (tx + 16 < camera.xi or tx > camera.xi + 320) continue;
 
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {
-                gfx.blit(&sprites.herb, tx - camera.xi, ty - camera.yi, 0x00, false);
+                gfx.blit(&sprites.herb, 16, tx - camera.xi, ty - camera.yi, 0);
             } else if (map.lvl[y][x] == 1) {
-                gfx.blit(&sprites.block, tx - camera.xi, ty - camera.yi, 0x00, false);
+                gfx.blit(&sprites.block, 16, tx - camera.xi, ty - camera.yi, 0);
             } else if (map.lvl[y][x] == 2) {
-                gfx.blit(&sprites.skull, tx - camera.xi, ty - camera.yi, 0xe8, false);
+                gfx.blit(&sprites.skull, 16, tx - camera.xi, ty - camera.yi, 0);
             } else if (map.lvl[y][x] == 3) {
-                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], tx - camera.xi, ty - camera.yi, 0xe8, false);
+                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], 16, tx - camera.xi, ty - camera.yi, 0);
             }
-            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rect(tx - camera.xi, ty - camera.yi, 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rect(tx - camera.xi, ty - camera.yi + 15, 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rect(tx - camera.xi, ty - camera.yi, 1, 16, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rect(tx - camera.xi + 15, ty - camera.yi, 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi), 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi + 15), 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi), 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi + 15), @intToFloat(f32, ty - camera.yi), 1, 16, 176);
         }
     }
 
