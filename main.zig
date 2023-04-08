@@ -60,14 +60,16 @@ fn draw_clouds() void {
         var flayer = @intToFloat(f32, layer);
         for (0..map.lvl.len) |y| {
             for (0..map.lvl[0].len) |x| {
+                var fx = @intToFloat(f32, x) * 16;
+                var fy = @intToFloat(f32, y) * 16;
                 for (1..4) |s| {
                     var fs = @intToFloat(f32, s * 8);
                     if (sky[(x * y + s - layer * 100) % sky.len] > y * 16 * @sizeOf(i64)) {
-                        var fx = @intToFloat(f32, x);
-                        var fy = @intToFloat(f32, y);
-                        if (fy * 16 > cos(fx * 16 / 40) * 40 + 240 - 100 + fs) {
+                        if (fy > cos(fx / 40) * 40 + 240 - 100 + fs) {
                             var cosize = fs + @floatCast(f32, cos(frames / 30 + fx));
-                            circle(fx * 16 - flayer * 32 - camera.x / (3 - flayer), fy * 16 + 30 * flayer, cosize, colors[layer]);
+                            var xx = fx - flayer * 32 - camera.x / (3 - flayer);
+                            if (xx + 16 < 0 or xx - 16 > 320) continue;
+                            circle(xx, fy + 30 * flayer, cosize, colors[layer]);
                         }
                     }
                 }
@@ -79,7 +81,7 @@ fn draw_clouds() void {
 fn draw() void {
     cls(77);
 
-    // draw_clouds();
+    draw_clouds();
 
     for (0..map.lvl.len) |y| {
         for (0..map.lvl[0].len) |x| {
