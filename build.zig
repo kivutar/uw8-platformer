@@ -20,7 +20,7 @@ pub fn build(b: *std.build.Builder) void {
     lib.max_memory = 262144;
     lib.global_base = 81920;
     lib.stack_size = 8192;
-    lib.install();
+    b.installArtifact(lib)
     lib.step.dependOn(&assets.step);
 
     if (lib.install_step) |install_step| {
