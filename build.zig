@@ -25,7 +25,6 @@ pub fn build(b: *std.build.Builder) void {
     b.installArtifact(lib);
 
     const run_filter_exports = b.addSystemCommand(&[_][]const u8{ "uw8", "filter-exports", "zig-out/lib/cart.wasm", "zig-out/lib/cart-filtered.wasm" });
-    run_filter_exports.step.dependOn(&install_step.step);
 
     const run_wasm_opt = b.addSystemCommand(&[_][]const u8{ "wasm-opt", "-Oz", "-o", "zig-out/cart.wasm", "zig-out/lib/cart-filtered.wasm" });
     run_wasm_opt.step.dependOn(&run_filter_exports.step);
