@@ -2,6 +2,7 @@ const sprites = @import("sprites.zig");
 const map = @import("map.zig");
 const gfx = @import("gfx.zig");
 const entity = @import("entity.zig");
+const input = @import("input.zig");
 const camera = @import("camera.zig");
 const turnip = @import("turnip.zig");
 // const sun = @import("sun.zig");
@@ -53,6 +54,8 @@ export fn upd() void {
     camera.update(tur1.x + tur1.width / 2, tur1.y + tur1.height / 2);
 
     draw();
+
+    input.update();
 }
 
 fn draw_clouds() void {

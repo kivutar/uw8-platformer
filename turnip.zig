@@ -3,6 +3,7 @@ const map = @import("map.zig");
 const gfx = @import("gfx.zig");
 const utils = @import("utils.zig");
 const entity = @import("entity.zig");
+const input = @import("input.zig");
 
 const JUMP_FORGIVENESS = 4;
 
@@ -26,19 +27,6 @@ var turnip_jump_anim = gfx.Anim{
         sprites.turnip_spr0,
     },
 };
-
-const PADS: *[4]u8 = @intToPtr(*[4]u8, 0x00044);
-var OLD_PADS: [4]u8 = undefined;
-
-fn isButtonPressed(pad: u8, btn: u3) i32 {
-    return PADS[pad] & (@as(u8, 1) << btn);
-}
-
-fn isButtonTriggered(pad: u8, btn: u3) i32 {
-    const t: bool = (PADS[pad] & (@as(u8, 1) << btn)) != 0 and (OLD_PADS[pad] & (@as(u8, 1) << btn)) == 0;
-    OLD_PADS = PADS.*;
-    return @boolToInt(t);
-}
 
 extern fn playNote(channel: i32, note: i32) void;
 
@@ -84,9 +72,9 @@ pub const Turnip = struct {
         var grounded = self.ontheground();
         if (!grounded) self.ungrounded_frames += 1 else self.ungrounded_frames = 0;
 
-        if (isButtonPressed(self.pad, 2) != 0) {
+        if (input.isButtonPressed(self.pad, 2) != 0) {
             self.xaccel = -0.1;
-        } else if (isButtonPressed(self.pad, 3) != 0) {
+        } else if (input.isButtonPressed(self.pad, 3) != 0) {
             self.xaccel = 0.1;
         } else {
             self.xaccel = 0;
@@ -103,14 +91,14 @@ pub const Turnip = struct {
             self.yaccel = 0.2;
         }
 
-        if (isButtonTriggered(self.pad, 4) != 0 and self.ungrounded_frames <= JUMP_FORGIVENESS) {
+        if (input.isButtonTriggered(self.pad, 4) != 0 and self.ungrounded_frames <= JUMP_FORGIVENESS) {
             self.yspeed = -4;
             playNote(3, 60);
         } else {
             playNote(3, 0);
         }
 
-        if (isButtonPressed(self.pad, 4) != 0 and self.yspeed < 0) self.jumping_frames += 1 else self.jumping_frames = 0;
+        if (input.isButtonPressed(self.pad, 4) != 0 and self.yspeed < 0) self.jumping_frames += 1 else self.jumping_frames = 0;
         if (self.jumping_frames > 1 and self.jumping_frames < 40)
             self.yspeed -= 0.05;
 
@@ -118,7 +106,7 @@ pub const Turnip = struct {
         self.yspeed = utils.clamp(self.yspeed, -4, 4);
         self.x += self.xspeed;
         self.y += self.yspeed;
-        self.xspeed = utils.xfriction(self.xspeed);
+        self.xspeed = utils.xfriction(self.pad, self.xspeed);
 
         if (solid_at((self.x + self.width) / 16, (self.y + self.height - 4) / 16) and self.xspeed > 0) {
             self.x = @floor(self.x / 16) * 16 + 16 - self.width;
@@ -147,7 +135,7 @@ pub const Turnip = struct {
 
         if (self.yspeed != 0) {
             self.anim = &turnip_jump_anim;
-        } else if (isButtonPressed(self.pad, 2) != 0 or isButtonPressed(self.pad, 3) != 0) {
+        } else if (input.isButtonPressed(self.pad, 2) != 0 or input.isButtonPressed(self.pad, 3) != 0) {
             self.anim = &turnip_run_anim;
         } else if (self.xspeed == 0) {
             self.anim = &turnip_stand_anim;
