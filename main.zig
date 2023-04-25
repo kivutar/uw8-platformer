@@ -13,11 +13,13 @@ extern fn cos(f64) f64;
 extern fn randomSeed(i32) void;
 
 // var sun1 = sun.Sun.init(32, 32);
-var tur1 = turnip.Turnip.init(64, 240 - 32 - 16);
+var tur1 = turnip.Turnip.init(64, 240 - 32 - 16, 0);
+var tur2 = turnip.Turnip.init(64 + 16, 240 - 32 - 16, 1);
 
 var entities = [_]*entity.Entity{
     // &sun1.entity,
     &tur1.entity,
+    &tur2.entity,
 };
 
 var sky = [_]i32{0} ** 64;
@@ -79,7 +81,7 @@ fn draw_clouds() void {
 fn draw() void {
     cls(77);
 
-    //draw_clouds();
+    draw_clouds();
 
     for (0..map.lvl.len) |y| {
         for (0..map.lvl[0].len) |x| {
