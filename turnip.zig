@@ -3,6 +3,7 @@ const map = @import("map.zig");
 const gfx = @import("gfx.zig");
 const utils = @import("utils.zig");
 const entity = @import("entity.zig");
+const camera = @import("camera.zig");
 const input = @import("input.zig");
 
 const JUMP_FORGIVENESS = 4;
@@ -145,6 +146,8 @@ pub const Turnip = struct {
     }
 
     pub fn draw(self: *Turnip) void {
-        gfx.blit(&(self.anim.frames[(self.anim.counter / 6) % self.anim.frames.len]), @floatToInt(i32, self.x) - 2, @floatToInt(i32, self.y), 0xe8, self.flip);
+        var ctrl: i32 = 0xe8 | (1 << 8);
+        ctrl |= if (self.flip) 1 << 9 else 0;
+        gfx.blit(&self.anim.frames[(self.anim.counter / 6) % self.anim.frames.len], 16, @floatToInt(i32, self.x) - 2 - camera.xi, @floatToInt(i32, self.y) - camera.yi, ctrl);
     }
 };

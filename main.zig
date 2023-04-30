@@ -65,14 +65,16 @@ fn draw_clouds() void {
         var flayer = @intToFloat(f32, layer);
         for (0..map.lvl.len) |y| {
             for (0..map.lvl[0].len) |x| {
+                var fx = @intToFloat(f32, x) * 16;
+                var fy = @intToFloat(f32, y) * 16;
                 for (1..4) |s| {
                     var fs = @intToFloat(f32, s * 8);
                     if (sky[(x * y + s - layer * 100) % sky.len] > y * 16 * @sizeOf(i64)) {
-                        var fx = @intToFloat(f32, x);
-                        var fy = @intToFloat(f32, y);
-                        if (fy * 16 > cos(fx * 16 / 40) * 40 + 240 - 100 + fs) {
+                        if (fy > cos(fx / 40) * 40 + 240 - 100 + fs) {
                             var cosize = fs + @floatCast(f32, cos(frames / 30 + fx));
-                            circle(fx * 16 - flayer * 32 - camera.x / (3 - flayer), fy * 16 + 30 * flayer, cosize, colors[layer]);
+                            var xx = fx - flayer * 32 - camera.x / (3 - flayer);
+                            if (xx + 16 < 0 or xx - 16 > 320) continue;
+                            circle(xx, fy + 30 * flayer, cosize, colors[layer]);
                         }
                     }
                 }
@@ -93,18 +95,18 @@ fn draw() void {
             if (tx + 16 < camera.xi or tx > camera.xi + 320) continue;
 
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {
-                gfx.blit(&sprites.herb, tx, ty, 0x00, false);
+                gfx.blit(&sprites.herb, 16, tx - camera.xi, ty - camera.yi, 0);
             } else if (map.lvl[y][x] == 1) {
-                gfx.blit(&sprites.block, tx, ty, 0x00, false);
+                gfx.blit(&sprites.block, 16, tx - camera.xi, ty - camera.yi, 0);
             } else if (map.lvl[y][x] == 2) {
-                gfx.blit(&sprites.skull, tx, ty, 0xe8, false);
+                gfx.blit(&sprites.skull, 16, tx - camera.xi, ty - camera.yi, 0);
             } else if (map.lvl[y][x] == 3) {
-                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], tx, ty, 0xe8, false);
+                gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], 16, tx - camera.xi, ty - camera.yi, 0);
             }
-            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rect(tx, ty, 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rect(tx, ty + 15, 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rect(tx, ty, 1, 16, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rect(tx + 15, ty, 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi), 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi + 15), 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi), 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi + 15), @intToFloat(f32, ty - camera.yi), 1, 16, 176);
         }
     }
 
