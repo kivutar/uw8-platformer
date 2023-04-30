@@ -2,6 +2,7 @@ const sprites = @import("sprites.zig");
 const map = @import("map.zig");
 const gfx = @import("gfx.zig");
 const entity = @import("entity.zig");
+const input = @import("input.zig");
 const camera = @import("camera.zig");
 const turnip = @import("turnip.zig");
 // const sun = @import("sun.zig");
@@ -13,11 +14,13 @@ extern fn cos(f64) f64;
 extern fn randomSeed(i32) void;
 
 // var sun1 = sun.Sun.init(32, 32);
-var tur1 = turnip.Turnip.init(64, 240 - 32 - 16);
+var tur1 = turnip.Turnip.init(64, 240 - 32 - 16, 0);
+var tur2 = turnip.Turnip.init(64 + 16, 240 - 32 - 16, 1);
 
 var entities = [_]*entity.Entity{
     // &sun1.entity,
     &tur1.entity,
+    &tur2.entity,
 };
 
 var sky = [_]i32{0} ** 64;
@@ -51,6 +54,8 @@ export fn upd() void {
     camera.update(tur1.x + tur1.width / 2, tur1.y + tur1.height / 2);
 
     draw();
+
+    input.update();
 }
 
 fn draw_clouds() void {

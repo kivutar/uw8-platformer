@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 defaults:
   run:
@@ -15,8 +15,11 @@ jobs:
   build_linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: goto-bus-stop/setup-zig@v2
         with:
-          version: master
+          version: 0.11.0-dev.2613+b42562be7
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.19.5'
       - run: zig build
