@@ -18,8 +18,8 @@ pub const Sun = struct {
             .x = x,
             .y = y,
             .entity = entity.Entity{
-                .updateFn = @ptrCast(entity.Entity.UpdateFn, &update),
-                .drawFn = @ptrCast(entity.Entity.DrawFn, &draw),
+                .updateFn = @ptrCast(&update),
+                .drawFn = @ptrCast(&draw),
             },
         };
     }
@@ -29,6 +29,6 @@ pub const Sun = struct {
     }
 
     pub fn draw(self: *Sun) void {
-        gfx.blit(&sprites.skull, 16, @floatToInt(i32, self.x) - camera.xi, @floatToInt(i32, self.y) - camera.yi, 0xe8 | (1 << 8));
+        gfx.blit(&sprites.skull, 16, @as(i32, @intFromFloat(self.x)) - camera.xi, @as(i32, @intFromFloat(self.y)) - camera.yi, 0xe8 | (1 << 8));
     }
 };
