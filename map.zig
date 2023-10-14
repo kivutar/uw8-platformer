@@ -17,5 +17,5 @@ pub const lvl = [15][77]u8{
 };
 
 pub fn at(x: f32, y: f32) i32 {
-    return lvl[@floatToInt(usize, y)][@floatToInt(usize, x)];
+    return lvl[@intFromFloat(y)][@intFromFloat(x)];
 }

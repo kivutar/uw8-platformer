@@ -62,16 +62,16 @@ fn draw_clouds() void {
     const colors = [2]u8{ 232, 191 };
 
     for (0..2) |layer| {
-        var flayer = @intToFloat(f32, layer);
+        var flayer: f32 = @floatFromInt(layer);
         for (0..map.lvl.len) |y| {
             for (0..map.lvl[0].len) |x| {
-                var fx = @intToFloat(f32, x) * 16;
-                var fy = @intToFloat(f32, y) * 16;
+                var fx = @as(f32, @floatFromInt(x)) * 16;
+                var fy = @as(f32, @floatFromInt(y)) * 16;
                 for (1..4) |s| {
-                    var fs = @intToFloat(f32, s * 8);
+                    var fs: f32 = @floatFromInt(s * 8);
                     if (sky[(x * y + s - layer * 100) % sky.len] > y * 16 * @sizeOf(i64)) {
                         if (fy > cos(fx / 40) * 40 + 240 - 100 + fs) {
-                            var cosize = fs + @floatCast(f32, cos(frames / 30 + fx));
+                            var cosize = fs + @as(f32, @floatCast(cos(frames / 30 + fx)));
                             var xx = fx - flayer * 32 - camera.x / (3 - flayer);
                             if (xx + 16 < 0 or xx - 16 > 320) continue;
                             circle(xx, fy + 30 * flayer, cosize, colors[layer]);
@@ -90,8 +90,8 @@ fn draw() void {
 
     for (0..map.lvl.len) |y| {
         for (0..map.lvl[0].len) |x| {
-            const tx = @intCast(i32, x) * 16;
-            const ty = @intCast(i32, y) * 16;
+            const tx = @as(i32, @intCast(x)) * 16;
+            const ty = @as(i32, @intCast(y)) * 16;
             if (tx + 16 < camera.xi or tx > camera.xi + 320) continue;
 
             if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) {
@@ -103,10 +103,10 @@ fn draw() void {
             } else if (map.lvl[y][x] == 3) {
                 gfx.blit(&waterfall_anim.frames[waterfall_anim.counter / 8 % waterfall_anim.frames.len], 16, tx - camera.xi, ty - camera.yi, 0);
             }
-            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi), 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi + 15), 16, 1, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi), @intToFloat(f32, ty - camera.yi), 1, 16, 176);
-            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rectangle(@intToFloat(f32, tx - camera.xi + 15), @intToFloat(f32, ty - camera.yi), 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y - 1][x] != 1) gfx.rectangle(@as(f32, @floatFromInt(tx - camera.xi)), @as(f32, @floatFromInt(ty - camera.yi)), 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y + 1][x] != 1) gfx.rectangle(@as(f32, @floatFromInt(tx - camera.xi)), @as(f32, @floatFromInt(ty - camera.yi + 15)), 16, 1, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x - 1] != 1) gfx.rectangle(@as(f32, @floatFromInt(tx - camera.xi)), @as(f32, @floatFromInt(ty - camera.yi)), 1, 16, 176);
+            if (map.lvl[y][x] == 1 and map.lvl[y][x + 1] != 1) gfx.rectangle(@as(f32, @floatFromInt(tx - camera.xi + 15)), @as(f32, @floatFromInt(ty - camera.yi)), 1, 16, 176);
         }
     }
 

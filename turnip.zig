@@ -59,8 +59,8 @@ pub const Turnip = struct {
             .y = y,
             .pad = pad,
             .entity = entity.Entity{
-                .updateFn = @ptrCast(entity.Entity.UpdateFn, &update),
-                .drawFn = @ptrCast(entity.Entity.DrawFn, &draw),
+                .updateFn = @ptrCast(&update),
+                .drawFn = @ptrCast(&draw),
             },
         };
     }
@@ -85,7 +85,7 @@ pub const Turnip = struct {
         self.yspeed += self.yaccel;
 
         if (grounded and self.yspeed >= 0) {
-            self.y = @intToFloat(f32, (@floatToInt(i32, self.y / 16)) * 16);
+            self.y = @floatFromInt(@as(i32, (@intFromFloat(self.y / 16))) * 16);
             self.yspeed = 0;
             self.yaccel = 0;
         } else {
@@ -126,7 +126,7 @@ pub const Turnip = struct {
             self.yspeed = 0;
         }
 
-        self.x = utils.clamp(self.x, 0, @intToFloat(f32, map.lvl[0].len * 16) - self.width);
+        self.x = utils.clamp(self.x, 0, @as(f32, @floatFromInt(map.lvl[0].len * 16)) - self.width);
 
         if (self.xspeed > 0) {
             self.flip = true;
@@ -148,6 +148,6 @@ pub const Turnip = struct {
     pub fn draw(self: *Turnip) void {
         var ctrl: i32 = 0xe8 | (1 << 8);
         ctrl |= if (self.flip) 1 << 9 else 0;
-        gfx.blit(&self.anim.frames[(self.anim.counter / 6) % self.anim.frames.len], 16, @floatToInt(i32, self.x) - 2 - camera.xi, @floatToInt(i32, self.y) - camera.yi, ctrl);
+        gfx.blit(&self.anim.frames[(self.anim.counter / 6) % self.anim.frames.len], 16, @as(i32, @intFromFloat(self.x)) - 2 - camera.xi, @as(i32, @intFromFloat(self.y)) - camera.yi, ctrl);
     }
 };
